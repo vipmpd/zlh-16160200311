@@ -1,0 +1,72 @@
+/*************************************************************************/ 
+#include "LPC11XX.H"							// LPC1114头文件
+
+  	
+
+/**************************************************************************
+* FunctionName   : Delay()
+* Description    : 延时函数
+* EntryParameter : None
+* ReturnValue    : None
+**************************************************************************/
+void Delay()
+{
+	uint16_t i,j;
+	for(i=0;i<5000;i++)
+		for(j=0;j<200;j++);
+}
+/**************************************************************************
+* FunctionName   : LedInit()
+* Description    : 初始化LED端口
+* EntryParameter : None
+* ReturnValue    : None
+**************************************************************************/
+void LedInit(void)
+{
+	uint16_t i = 0;
+	LPC_SYSCON->SYSAHBCLKCTRL |= (1<<16); // 打开IOCON 配置时钟
+	LPC_IOCON->PIO2_0 &= ~0x07;    
+	LPC_IOCON->PIO2_0 |= 0x00; 
+	LPC_IOCON->PIO2_1 &= ~0x07;	
+	LPC_IOCON->PIO2_1 |= 0x00; 
+	LPC_IOCON->PIO2_2 &= ~0x07;    
+	LPC_IOCON->PIO2_2 |= 0x00; 
+	LPC_IOCON->PIO2_3 &= ~0x07;	
+	LPC_IOCON->PIO2_3 |= 0x00; 
+	LPC_IOCON->PIO2_4 &= ~0x07;    
+	LPC_IOCON->PIO2_4 |= 0x00; 
+	LPC_IOCON->PIO2_5 &= ~0x07;	
+	LPC_IOCON->PIO2_5 |= 0x00; 
+	LPC_IOCON->PIO2_6 &= ~0x07;    
+	LPC_IOCON->PIO2_6 |= 0x00; 
+	LPC_IOCON->PIO2_7 &= ~0x07;	
+	LPC_IOCON->PIO2_7 |= 0x00;
+	LPC_SYSCON->SYSAHBCLKCTRL &= ~(1<<16); // 关闭IOCON 配置时钟
+	
+	for( i = 0;i < 8;i++)
+	{
+	LPC_GPIO2->DIR |= (1<<i); 
+	LPC_GPIO2->DATA |= (1<<i); 
+	}
+}
+/**************************************************************************
+* FunctionName   : main()
+* Description    : 主函数
+* EntryParameter : None
+* ReturnValue    : None
+**********************************************************************/
+int main(void) 
+{	
+	uint16_t i = 0;
+	LedInit();
+	while(1)
+	{
+		for( i = 0;i < 8;i++)
+		{
+		(LPC_GPIO2->DATA &= ~(1<<i)); 
+     Delay();			
+    (LPC_GPIO2->DATA |= (1<<i));
+     	
+	  } 
+  }
+}
